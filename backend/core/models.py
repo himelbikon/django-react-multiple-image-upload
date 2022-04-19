@@ -19,3 +19,11 @@ class Image(models.Model):
 
     def __str__(self):
         return self.human.name
+
+
+class Movie(models.Model):
+    name = models.CharField(max_length=100)
+    poster = models.ImageField(upload_to='movie')
+
+    def __str__(self):
+        return self.name

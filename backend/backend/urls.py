@@ -7,6 +7,7 @@ from core.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HumanAPIView.as_view()),
+    path('movies', MovieAPIView.as_view()),
 ]
 
 
