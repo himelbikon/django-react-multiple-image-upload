@@ -4,16 +4,22 @@ import { Form, Button, Row, Col, Container, Image } from "react-bootstrap"
 
 function App() {
   const [name, setName] = useState()
-  const [file, setFile] = useState()
+  const [file] = useState([])
+  const [test, setTest] = useState("")
 
   const send = (event) => {
-    console.log("send")
+    console.log("send", file)
     const data = new FormData()
     data.append("name", name)
-    data.append("poster", file)
+
+    file.map((image, i) => {
+      data.append(`poster${i}`, image)
+      console.log(`poster${i}`, image)
+      return NaN
+    })
 
     axios
-      .post("http://127.0.0.1:8000/movies", data)
+      .post("http://127.0.0.1:8000", data)
       .then((res) => console.log(res))
       .catch((err) => console.log(err))
   }
@@ -26,6 +32,7 @@ function App() {
           <Form.Control
             type="text"
             placeholder="Name"
+            value={name}
             onChange={(e) => {
               const { value } = e.target
               setName(value)
@@ -38,16 +45,21 @@ function App() {
           <Form.Control
             type="file"
             onChange={(e) => {
-              const file = e.target.files[0]
-              setFile(file)
+              const img = e.target.files[0]
+              file.push(img)
+              setTest(test + "s")
             }}
           />
         </Form.Group>
 
         <Button onClick={send} variant="primary" type="button">
-          Submit
+          Submit {file.length}
         </Button>
       </Form>
+
+      {file.map((image) => (
+        <div>{image.name}</div>
+      ))}
     </Container>
   )
 }

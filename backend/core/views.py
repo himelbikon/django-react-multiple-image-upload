@@ -5,7 +5,6 @@ from .serializers import *
 
 
 class HumanAPIView(APIView):
-
     def get(self, request):
         humans = Human.objects.all()
         serializer = HumanSerializer(humans, many=True)
@@ -19,11 +18,13 @@ class HumanAPIView(APIView):
 
         human = Human.objects.get(pk=serializer.data['id'])
 
-        images = dict((request.data).lists())['images']
-
-        for image in images:
-            image = Image(image=image, human=human)
-            image.save()
+        for i in range(100):
+            image = request.data.get(f'poster{i}')
+            if image:
+                obj = Image(image=image, human=human)
+                obj.save()
+            else:
+                break
 
         return Response(serializer.data)
 
@@ -36,8 +37,7 @@ class MovieAPIView(APIView):
 
     def post(self, request):
         name = request.data.get('name')
-        poster = request.data.get('poster')
-
+        poster = request.data.get('poster1')
         print('-----------', name, poster)
 
         movie = Movie(name=name, poster=poster)
